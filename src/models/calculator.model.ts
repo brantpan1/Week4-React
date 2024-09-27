@@ -1,13 +1,11 @@
-
-import { ActionKeys } from '../enums/action-keys.enum';
-import { NumericKeys } from '../enums/numeric-keys.enum';
-import { OperatorKeys } from '../enums/operator-keys.enum';
-import { ICalculatorModel } from '../interfaces/calculator-model.interface';
+import { ActionKeys } from "../enums/action-keys.enum";
+import { NumericKeys } from "../enums/numeric-keys.enum";
+import { OperatorKeys } from "../enums/operator-keys.enum";
+import { ICalculatorModel } from "../interfaces/calculator-model.interface";
 
 export class CalculatorModel implements ICalculatorModel {
-
   private _operands: Array<string> = [];
-  private _buffer: string = '';
+  private _buffer: string = "";
   private _operators: Array<OperatorKeys> = [];
 
   public pressNumericKey(key: NumericKeys): void {
@@ -17,18 +15,18 @@ export class CalculatorModel implements ICalculatorModel {
   public pressOperatorKey(key: OperatorKeys): void {
     this._operators.push(key);
     this._operands.push(this._buffer);
-    this._buffer = '';
+    this._buffer = "";
   }
 
   public pressActionKey(key: ActionKeys): void {
     switch (key) {
       case ActionKeys.CLEAR:
-        this._buffer = '';
+        this._buffer = "";
         this._operands = [];
         this._operators = [];
         break;
       case ActionKeys.DOT:
-        this._buffer += '.';
+        this._buffer += ".";
         break;
       case ActionKeys.EQUALS:
         this._operands.push(this._buffer);
@@ -39,7 +37,7 @@ export class CalculatorModel implements ICalculatorModel {
         this._buffer = this.evaluate();
         break;
       default:
-        throw new Error('Invalid Action');
+        throw new Error("Invalid Action");
     }
   }
 
@@ -48,13 +46,12 @@ export class CalculatorModel implements ICalculatorModel {
   }
 
   private evaluate(): string {
-
-    while(this._operators.length > 0) {
+    while (this._operators.length > 0) {
       const operator: OperatorKeys = this._operators.shift() as OperatorKeys;
       const operandOne: number = parseFloat(this._operands.shift() as string);
       const operandTwo: number = parseFloat(this._operands.shift() as string);
-      
-      switch(operator) {
+
+      switch (operator) {
         case OperatorKeys.PLUS:
           this._buffer = (operandOne + operandTwo).toString();
           break;
@@ -63,7 +60,7 @@ export class CalculatorModel implements ICalculatorModel {
           break;
         case OperatorKeys.MULT:
           this._buffer = (operandOne * operandTwo).toString();
-          break;  
+          break;
         case OperatorKeys.DIV:
           this._buffer = (operandOne / operandTwo).toString();
           break;
@@ -72,9 +69,7 @@ export class CalculatorModel implements ICalculatorModel {
       }
       this._operands.unshift(this._buffer);
     }
-  
+
     return this._operands.shift() as string;
-
   }
-
 }
